@@ -13,8 +13,7 @@
 #include "openssl/sha.h"
 #include "../include/signature.h"
 
-static int is_filename(char *name)
-{
+static int is_filename(char *name) {
 	if (access(name, F_OK) != -1)
 		return 1;
 	else
@@ -22,8 +21,7 @@ static int is_filename(char *name)
 }
 
 #define READ_SIZE 32768
-int sha256_file (char* to_hash, unsigned char *digest)
-{
+int sha256_file (char* to_hash, unsigned char *digest) {
 	char hash[SHA256_DIGEST_LENGTH];
 	SHA256_CTX sha256;
 	char *buffer = NULL;
@@ -45,8 +43,9 @@ int sha256_file (char* to_hash, unsigned char *digest)
 		return -1;
 	}
 
-	while((bytes_read = fread(buffer, 1, bufsize, file)))
+	while ((bytes_read = fread(buffer, 1, bufsize, file))) {
 		SHA256_Update(&sha256, buffer, bytes_read);
+	}
 
 	SHA256_Final(digest, &sha256);
 
@@ -56,21 +55,19 @@ int sha256_file (char* to_hash, unsigned char *digest)
 	return 0;
 }
 
-void sha256_string(char* str, unsigned char *digest)
-{
+void sha256_string(char* str, unsigned char *digest) {
 	SHA256_CTX c;
 	SHA256_Init(&c);
 	SHA256_Update(&c, str, strlen(str));
 	SHA256_Final(digest, &c);
 }
 
-void print_hex_hash(unsigned char* digest, int length)
-{
+void print_hex_hash(unsigned char* digest, int length) {
 	int i;
-	for(i=0; i < length; i++)
+	for (i=0; i < length; i++) {
 		printf("%02x", digest[i]);
+	}
 }
-
 
 int grab (int argc, char **argv, char *to_hash) {
 	unsigned char sha256_digest[SHA256_DIGEST_LENGTH];
